@@ -16,11 +16,11 @@ public class RedisPoolConfig {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RedisPoolConfig.class);
 
-	@Value("${redis.host}")
-	private String REDIS_HOST;
+	@Value("${redis.host:localhost}")
+	private String redisHost;
 
-	@Value("${redis.port}")
-	private int REDIS_PORT;
+	@Value("${redis.port:6379}")
+	private int redisPort;
 
 	@Bean
 	public JedisPool jedisPool() {
@@ -35,9 +35,9 @@ public class RedisPoolConfig {
 		poolConfig.setTimeBetweenEvictionRunsMillis(Duration.ofSeconds(30).toMillis());
 		poolConfig.setNumTestsPerEvictionRun(3);
 		poolConfig.setBlockWhenExhausted(true);
-		JedisPool jedisPool = new JedisPool(poolConfig, REDIS_HOST, REDIS_PORT);
+		JedisPool jedisPool = new JedisPool(poolConfig, redisHost, redisPort);
 
-		LOGGER.info("[jedisPool:Ready] Host [" + REDIS_HOST + "] Port [" + REDIS_PORT + "] " + poolConfig.toString());
+		LOGGER.info("[jedisPool:Ready] Host [" + redisHost + "] Port [" + redisPort + "] " + poolConfig.toString());
 
 		return jedisPool;
 	}
