@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+
+  db-redis-rankscore:
+    image: redis
+    restart: always
+    networks:
+      - net-redis-rankscore
+    command: redis-server
+
+networks:
+    net-redis-rankscore:
+      name: net-redis-rankscore
+      driver: bridge
