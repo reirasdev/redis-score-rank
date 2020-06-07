@@ -1,0 +1,27 @@
+# This workflow performs the folling tasks:
+# Run tests, compile and package app with Maven
+# Build Docker image
+# Publish Docker image on DockerHub
+# Up container, based on DockerHub publication, using Docker Compose on AWS EC2 instance
+
+name: CD | Maven | Docker | AWS EC2
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      
+    - name: Set up JDK 11
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
+    
+    - name: Run tests and package JAR file with Maven
+      run: mvn -B clean package
