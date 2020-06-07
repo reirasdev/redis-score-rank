@@ -15,9 +15,10 @@ import redis.clients.jedis.Tuple;
 public class RedisZSetSorter implements Sorter<User> {
 
 	/*
-	 * Redis ZSet structure sorts our list of players based on each score but does not return position of each member of the ranking
-	 * Taking advantage of the fact it can return the ranking ordered by SCORE DESC, this method reads the Set and saves saves position for each element in the same order it was returned
-	 * The algorithm considers that same score should be represented by the same position on the ranking
+	 * Redis ZSet structure sorts our list of players based on each score but does not return position of each member of the ranking.
+	 * Taking advantage of the fact it returns the ranking ordered by SCORE DESC, this method reads the Set and saves each element on a list respecting the same position.
+	 * In this same process, the property <position> is filled for each user. 
+	 * The algorithm considers that same score should be represented by the same position on the ranking. 
 	 */
 	@Override
 	public List<User> sort(Iterable<?> it) {

@@ -5,6 +5,9 @@ import java.util.Optional;
 
 public interface ScoreRankRepository<T> {
 
+	/*
+	 * Providing a generic interface to make possible and easy to change "in memory" technology if necessary in future.
+	 */
 	public void incrementScore(Integer id, Integer score);
 
 	public Optional<T> findById(Integer id);
