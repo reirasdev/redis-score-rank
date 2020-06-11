@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
 
-  localidademicroservice:
+  score-rank-app:
     image: reirasdev/score-rank:${IMAGE_TAG}
     restart: always
     environment:
