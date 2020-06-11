@@ -1,9 +1,13 @@
 package com.reiras.redisscorerank.repository;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +22,8 @@ import redis.clients.jedis.Tuple;
 
 @Component
 public class UserRedisRepository implements ScoreRankRepository<User> {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserRedisRepository.class);
 
 	@Autowired
 	private JedisPool jedisPool;
@@ -45,6 +51,11 @@ public class UserRedisRepository implements ScoreRankRepository<User> {
 	@Override
 	public void incrementScore(Integer id, Integer score) {
 
+		Instant start = Instant.now();
+		LOGGER.info(new StringBuffer("[incrementScore:Start]")
+				.append(" Input=>{id=").append(id).append("}")
+				.append("{score=").append(score).append("}").toString());
+		
 		try (Jedis jedis = jedisPool.getResource();) {
 			jedis.zincrby(ZSET_KEY, score.doubleValue(), id.toString());
 
@@ -52,6 +63,9 @@ public class UserRedisRepository implements ScoreRankRepository<User> {
 			throw new RepositoryException("Error handling operation [incrementScore]", e);
 
 		}
+		
+		LOGGER.info(new StringBuffer("[incrementScore:End:").append(start.until(Instant.now(), ChronoUnit.MILLIS)).append("ms]")
+				.append(" Output=>{}").toString());
 
 	}
 
@@ -62,9 +76,14 @@ public class UserRedisRepository implements ScoreRankRepository<User> {
 	 */
 	@Override
 	public Optional<User> findById(Integer id) {
+		
+		Instant start = Instant.now();
+		LOGGER.info(new StringBuffer("[findById:Start]")
+				.append(" Input=>{id=").append(id).append("}").toString());
+		
 		Double score = null;
-		Long position = null;
-
+		Long position = null;		
+		
 		try (Jedis jedis = jedisPool.getResource();) {
 			score = jedis.zscore(ZSET_KEY, id.toString());
 
@@ -78,8 +97,13 @@ public class UserRedisRepository implements ScoreRankRepository<User> {
 			throw new RepositoryException("Error handling operation [findById]", e);
 
 		}
+		
+		User user = new User(id, score.intValue(), position.intValue());
+		
+		LOGGER.info(new StringBuffer("[findById:End:").append(start.until(Instant.now(), ChronoUnit.MILLIS)).append("ms]")
+				.append(" Output=>{user=").append(user).append("}").toString());
 
-		return Optional.of(new User(id, score.intValue(), position.intValue()));
+		return Optional.of(user);
 	}
 	
 	/*
@@ -91,6 +115,12 @@ public class UserRedisRepository implements ScoreRankRepository<User> {
 
 	@Override
 	public List<User> findAllOrderByScoreDesc(Long startIndex, Long stopIndex) {
+		
+		Instant startInstant = Instant.now();
+		LOGGER.info(new StringBuffer("[findAllOrderByScoreDesc:Start]")
+				.append(" Input=>{startIndex=").append(startIndex).append("}")
+				.append("{stopIndex=").append(stopIndex).append("}").toString());
+		
 		List<User> usersList = null;
 		Set<Tuple> zSet = null;
 		Long start = ZSET_FIRST_INDEX;
@@ -111,6 +141,11 @@ public class UserRedisRepository implements ScoreRankRepository<User> {
 		}
 
 		usersList = (List<User>) sorterFactory.getSorter(SorterType.REDIS_ZSET_USER).sort(zSet);
+		
+		LOGGER.info(new StringBuffer("[findAllOrderByScoreDesc:End:").append(startInstant.until(Instant.now(), ChronoUnit.MILLIS)).append("ms]")
+				.append(" Output=>{").append(usersList.getClass())
+				.append(":").append(usersList.size()).append("items}").toString());
+		
 		return usersList;
 	}
 
