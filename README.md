@@ -1,7 +1,7 @@
 ![CD | Maven | Docker | AWS EC2](https://github.com/reirasdev/score-rank/workflows/CD%20%7C%20Maven%20%7C%20Docker%20%7C%20AWS%20EC2/badge.svg?branch=master)
 
 ## Pipa Score Rank
-HTTP based mini game backend with Java and Spring Boot which registers score points for different users and returns user position and high score list.
+HTTP based mini game backend with Java and Spring Boot which registers score points for different users and returns user position and high score list. Unit tests for "in memory" cache solution were also included.
 
 ### 1 - Starting your application:
 1. You will need Maven</br>
