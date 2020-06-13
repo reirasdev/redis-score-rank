@@ -4,10 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.reiras.redisscorerank.controller.ScoreRankController;
 import com.reiras.redisscorerank.domain.User;
+import com.reiras.redisscorerank.repository.PipaRankMemDb;
 import com.reiras.redisscorerank.repository.ScoreRankRepository;
 import com.reiras.redisscorerank.service.UserService;
 
@@ -15,19 +17,24 @@ import com.reiras.redisscorerank.service.UserService;
 class RedisScoreRankApplicationTests {
 
 	@Autowired
-	private ScoreRankRepository<User> userRedisRepository;
-	
+	@Qualifier("userPipaMemDbRepository")
+	private ScoreRankRepository<User> scoreRankRepository;
+
+	@Autowired
+	private PipaRankMemDb pipaRankMemDb;
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
-	private ScoreRankController scoreRankController; 
-	
+	private ScoreRankController scoreRankController;
+
 	@Test
 	void contextLoads() {
-		assertNotNull(userRedisRepository);
+		assertNotNull(scoreRankRepository);
 		assertNotNull(userService);
 		assertNotNull(scoreRankController);
+		assertNotNull(pipaRankMemDb);
 	}
 
 }
