@@ -1,6 +1,6 @@
 ![CD | Maven | Docker | AWS EC2](https://github.com/reirasdev/score-rank/workflows/CD%20%7C%20Maven%20%7C%20Docker%20%7C%20AWS%20EC2/badge.svg?branch=master)
 
-## REDIS Score Rank
+## Using Redis to register score points in a Restful API
 HTTP based mini game backend with Java and Spring Boot unsing Redis to register score points for different users and returns user position and high score list. Unit tests for "in memory" cache solution were also included.
 
 ### 1 - Starting your application:
