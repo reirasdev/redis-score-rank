@@ -20,4 +20,4 @@ It has initial data loaded for tests.
 
 ### 3 - Run with Docker
 Run this app with [docker-compose.yml](https://github.com/reirasdev/score-rank/blob/master/docker-compose.yml)</br>
-Images available at https://hub.docker.com/r/reirasdev/score-rank
+Images available at https://hub.docker.com/r/reirasdev/redis-score-rank
